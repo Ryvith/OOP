@@ -4,6 +4,7 @@ import com.github.ryvith.model.Board;
 
 public class BoardPrinter {
     public static void printInitialBoard(Board board){
+        System.out.print("\033[H\033[2J\033[?25l");
         // 打印列标签
         System.out.print(" ");
         for(int i = 0; i< board.getSize(); i++){

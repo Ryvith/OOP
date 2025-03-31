@@ -16,7 +16,7 @@ public class StandardBoardInitializer implements BoardInitializer{
         int center = board.getSize()/2 -1;
         board.setPiece(center,center, Piece.WHITE);
         board.setPiece(center,center+1, Piece.BLACK);
-        board.setPiece(center+1, center, Piece.WHITE);
-        board.setPiece(center+1, center+1, Piece.BLACK);
+        board.setPiece(center+1, center, Piece.BLACK);
+        board.setPiece(center+1, center+1, Piece.WHITE);
     }
 }
