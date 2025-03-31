@@ -1,4 +1,4 @@
-package com.github.ryvith.model.type;
+package com.github.ryvith.model;
 
 import lombok.Getter;
 

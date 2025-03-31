@@ -1,6 +1,6 @@
 package com.github.ryvith;
 
-import com.github.ryvith.model.type.Piece;
+import com.github.ryvith.model.Piece;
 import junit.framework.TestCase;
 
 
