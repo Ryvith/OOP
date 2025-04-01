@@ -21,6 +21,7 @@ public class GameInfo {
                 player.equals(currentPlayer)? player.getPiece().getSymbol(): ' '
         );
     }
+/*
 
 
     public void printGameInfo(GameMode currentGame){
@@ -35,5 +36,6 @@ public class GameInfo {
 
         GotoPoint
     }
+*/
 
 }

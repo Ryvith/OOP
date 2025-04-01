@@ -1,6 +1,9 @@
 package com.github.ryvith.ui;
 
 import com.github.ryvith.model.Board;
+import com.github.ryvith.util.TerminalUtils;
+
+import java.util.Scanner;
 
 public class BoardPrinter {
     public static void printInitialBoard(Board board){
@@ -20,5 +23,7 @@ public class BoardPrinter {
             }
             System.out.println();
         }
+        TerminalUtils.moveCursorTo(3,1);
+        System.out.print('#');
     }
 }

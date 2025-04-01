@@ -21,9 +21,10 @@ public class TerminalUtils {
      * @param y 列号（从1开始）
      */
     public static void moveCursorTo(int x, int y) {
-        if (isAnsiSupported()) {
+
             System.out.printf("\033[%d;%dH",x, y);
-        }
+
+
     }
 
     /* 打印带颜色的文本 */

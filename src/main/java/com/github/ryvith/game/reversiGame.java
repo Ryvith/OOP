@@ -30,5 +30,6 @@ public class reversiGame extends GameMode {
             flippedPoints.add(new Point(currentPosition.x,currentPosition.y));
 
         }
+        return null;
     }
 }
