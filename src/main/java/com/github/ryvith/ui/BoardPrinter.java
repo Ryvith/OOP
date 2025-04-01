@@ -1,29 +1,35 @@
 package com.github.ryvith.ui;
 
 import com.github.ryvith.model.Board;
-import com.github.ryvith.util.TerminalUtils;
-
-import java.util.Scanner;
+import com.github.ryvith.model.Piece;
+import com.github.ryvith.util.AnsiColors;
 
 public class BoardPrinter {
-    public static void printInitialBoard(Board board){
-        System.out.print("\033[H\033[2J\033[?25l");
-        // 打印列标签
-        System.out.print(" ");
-        for(int i = 0; i< board.getSize(); i++){
-            System.out.print(" "+(char)('A'+i));
+    public static String renderBoardInfo(Board board){
+        StringBuilder sb = new StringBuilder();
+        int boardSize = board.getSize();
+        // 拼接列标签
+        sb.append(AnsiColors.BLUE).append(" ");
+        for(int i = 0; i< boardSize; i++){
+            sb.append(" ").append((char) ('A' + i));
         }
-        System.out.println();
+        sb.append(AnsiColors.RESET).append("\n");
 
-        // 打印行标签和棋盘
-        for(int i = 0; i< board.getSize(); i++){
-            System.out.print(i+1);
-            for(int j = 0; j< board.getSize(); j++){
-                System.out.print(" "+ board.getGrid()[i][j].getSymbol());
+        // 拼接行标签和棋盘
+        for(int i = 0; i< boardSize; i++){
+            sb.append(AnsiColors.BLUE).append(i+1).append(AnsiColors.RESET);
+            for(int j = 0; j< boardSize; j++){
+                Piece piece = board.getGrid()[i][j];
+                sb.append(" ");
+                if(piece == Piece.VALID){
+                    sb.append(AnsiColors.YELLOW);
+                }else if(piece == Piece.EMPTY){
+                    sb.append(AnsiColors.GRAY);
+                }
+                sb.append(piece.getSymbol()).append(AnsiColors.RESET);
             }
-            System.out.println();
+            sb.append("\n");
         }
-        TerminalUtils.moveCursorTo(3,1);
-        System.out.print('#');
+        return sb.toString();
     }
 }
