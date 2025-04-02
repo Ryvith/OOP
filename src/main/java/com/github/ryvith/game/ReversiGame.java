@@ -1,19 +1,20 @@
 package com.github.ryvith.game;
 
 import com.github.ryvith.model.Board;
-import com.github.ryvith.model.Piece;
+import com.github.ryvith.model.Player;
+import com.github.ryvith.model.StandardBoardInitializer;
 
 import java.awt.*;
 import java.util.List;
 import java.util.ArrayList;
 
-public class reversiGame extends GameMode {
-    reversiGame(String gameMode, int gameNumber) {
-        super(gameMode, gameNumber);
+public class ReversiGame extends GameMode {
+    public ReversiGame(GameConfig config) {
+        super(config, new StandardBoardInitializer());
     }
 
     @Override
-    boolean isValidMove(Board board, Point move) {
+    public boolean isValidMove(Board board, Point move) {
         return false;
     }
 

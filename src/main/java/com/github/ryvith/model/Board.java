@@ -3,7 +3,6 @@ package com.github.ryvith.model;
 import lombok.Value;
 
 import java.awt.*;
-import java.util.Arrays;
 
 @Value
 public class Board
@@ -17,7 +16,6 @@ public class Board
         grid = new Piece[size][size];
     }
 
-    // 工厂方法
     public static Board createBoard(int size, BoardInitializer initializer){
         Board board = new Board(size);
         initializer.initialize(board);

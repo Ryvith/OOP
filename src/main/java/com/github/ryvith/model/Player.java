@@ -12,7 +12,7 @@ public class Player {
     public Player(String name, int score,int num, Piece piece) {
         this.name = name;
         this.score = score;
-        this.num = 0;
+        this.num = num;
         this.piece = piece;
     }
 }
