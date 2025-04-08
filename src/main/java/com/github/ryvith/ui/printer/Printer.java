@@ -1,14 +1,14 @@
 package com.github.ryvith.ui.printer;
-import com.github.ryvith.game.GameMode;
+import com.github.ryvith.game.Game;
 import com.github.ryvith.util.Ansi;
 
 import java.util.Arrays;
 
 public class Printer {
-    static public void print(GameMode currentGameMode) {
+    static public void print(Game currentGame) {
         Ansi.cleanScreen();
-        String left = BoardInfo.renderBoardInfo(currentGameMode.getBoard());
-        String middle = GameInfo.renderGameInfo(currentGameMode);
+        String left = BoardInfo.renderBoardInfo(currentGame.getBoard());
+        String middle = GameInfo.renderGameInfo(currentGame);
         String right = GameInfo.gameListInfo;
 
         String fullOutput = combineThreeColumns(left, middle, right);
@@ -17,10 +17,10 @@ public class Printer {
     }
 
     // 缓冲区版本
-    static public void bufferPrinter(GameMode currentGameMode) {
+    static public void bufferPrinter(Game currentGame) {
         Ansi.cleanScreen();
-        String left = BoardInfo.renderBoardInfo(currentGameMode.getBoard());
-        String middle = GameInfo.renderGameInfo(currentGameMode);
+        String left = BoardInfo.renderBoardInfo(currentGame.getBoard());
+        String middle = GameInfo.renderGameInfo(currentGame);
         String right = GameInfo.gameListInfo;
         ScreenBuffer buffer = new Printer.ScreenBuffer();
         buffer.update(combineThreeColumns(left, middle, right));

@@ -12,8 +12,8 @@ public class Main {
                 .withPlayers("Tom", "Jerry")
                 .build();
 
-        GameMode reversi = new ReversiGame(config);
-        GameMode peace = new PeaceGame(config);
+        Game reversi = new ReversiGame(config);
+        Game peace = new PeaceGame(config);
 
         new GameController(List.of(reversi, peace)).start();
     }

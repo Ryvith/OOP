@@ -24,28 +24,28 @@ public class UserInput {
      * @param input 用户键盘标准输入
      * @return 用户的操作类型和输入内容
      */
-    public static ParsedInput parseInput(String input) {
+    public static ParsedOption parseInput(String input) {
 
         if (input.matches(SET_PIECE)) {
             int row = input.charAt(0) - '1';
             int col = input.charAt(1) - 'a';
-            return new ParsedInput(InputType.MOVE, new int[]{row, col});
+            return new ParsedOption(InputType.MOVE, new int[]{row, col});
         }
 
         if (input.matches(GAME_ID)) {
-            return new ParsedInput(InputType.SWITCH_GAME, Integer.parseInt(input));
+            return new ParsedOption(InputType.SWITCH_GAME, Integer.parseInt(input));
         }
 
         if (input.equals(PEACE) || input.equals(REVERSI)) {
-            return new ParsedInput(InputType.NEW_GAME, input);
+            return new ParsedOption(InputType.NEW_GAME, input);
         }
 
 
         if (input.equals(QUIT)) {
-            return new ParsedInput(InputType.QUIT, null);
+            return new ParsedOption(InputType.QUIT, null);
         }
 
-        return new ParsedInput(InputType.INVALID, null);
+        return new ParsedOption(InputType.INVALID, null);
     }
 
     // 用户输入类型
@@ -58,13 +58,11 @@ public class UserInput {
         INVALID
     }
 
-    public static class ParsedInput {
-        public final InputType type;
-        public final Object data;
-
-        public ParsedInput(InputType type, Object data) {
-            this.type = type;
-            this.data = data;
-        }
+    /**
+     * ParsedOption记录类
+     * @param type 用户的操作类型
+     * @param data 操作相关内容，如输入的字符串
+     */
+    public record ParsedOption(InputType type, Object data) {
     }
 }

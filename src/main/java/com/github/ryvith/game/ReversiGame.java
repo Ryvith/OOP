@@ -1,14 +1,13 @@
 package com.github.ryvith.game;
 
 import com.github.ryvith.model.Board;
-import com.github.ryvith.model.Player;
 import com.github.ryvith.model.StandardBoardInitializer;
 
 import java.awt.*;
 import java.util.List;
 import java.util.ArrayList;
 
-public class ReversiGame extends GameMode {
+public class ReversiGame extends Game {
     public ReversiGame(GameConfig config) {
         super(config, new StandardBoardInitializer());
     }

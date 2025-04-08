@@ -11,10 +11,10 @@ public final class GameConfig {
     private final int boardSize;
     private final String player1Name;
     private final String player2Name;
-    private final GameMode game;
+    private final Game game;
 
     // 私有构造器，强制通过Builder创建
-    private GameConfig(final int boardSize, final String player1Name, final String player2Name, final GameMode game) {
+    private GameConfig(final int boardSize, final String player1Name, final String player2Name, final Game game) {
         this.boardSize = boardSize;
         this.player1Name = player1Name;
         this.player2Name = player2Name;
@@ -30,7 +30,7 @@ public final class GameConfig {
         private int size = 8;
         private String player1 = "player1";
         private String player2 = "player2";
-        private GameMode game;
+        private Game game;
 
         public GameBuilder withSize(int size) {
             this.size = size;
@@ -43,7 +43,7 @@ public final class GameConfig {
             return this;
         }
 
-        public GameBuilder withGameMode(GameMode game){
+        public GameBuilder withGameMode(Game game){
             this.game = game;
             return this;
         }
