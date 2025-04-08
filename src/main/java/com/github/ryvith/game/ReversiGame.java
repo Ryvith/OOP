@@ -17,6 +17,16 @@ public class ReversiGame extends Game {
         return false;
     }
 
+    @Override
+    public boolean isGameOver() {
+        return false;
+    }
+
+    @Override
+    public void handleGameEnd() {
+
+    }
+
     /**
      * 获得需要翻转的棋子
      * @param board
