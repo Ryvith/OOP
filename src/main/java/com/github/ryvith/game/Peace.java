@@ -29,8 +29,6 @@ public class Peace extends Game {
 
     @Override
     public boolean shouldGameEnd() {
-        // 棋盘下满即可
-        shouldGameEnd = true;
         return countPieces(Piece.EMPTY) == 0;
     }
 

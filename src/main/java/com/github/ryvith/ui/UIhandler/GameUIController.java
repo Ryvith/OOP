@@ -193,10 +193,17 @@ public class GameUIController {
      * 更新棋盘显示
      */
     private void updateBoard() {
+        // 清除所有现有棋子显示
         for (Node node : boardGrid.getChildren()) {
             if (node instanceof StackPane && node.getUserData() instanceof Point) {
+                StackPane cell = (StackPane) node;
+                // 保留背景，移除其他元素
+                if (cell.getChildren().size() > 1) {
+                    cell.getChildren().remove(1, cell.getChildren().size());
+                }
+                // 重新渲染棋子
                 Point pos = (Point) node.getUserData();
-                updateCellAppearance((StackPane) node, pos.x, pos.y);
+                updateCellAppearance(cell, pos.x, pos.y);
             }
         }
     }
@@ -359,7 +366,7 @@ public class GameUIController {
         if (currentGame.handleMove(point)) {
             updateUI();
 
-            if (currentGame.shouldGameEnd) {
+            if (currentGame.shouldGameEnd()) {
                 GameResult result = currentGame.handleGameEnd();
                 showGameResult(result);
             }else{

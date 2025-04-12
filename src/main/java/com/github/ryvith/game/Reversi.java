@@ -22,7 +22,7 @@ public class Reversi extends Game {
             return false;
         }
         // 核心验证规则，至少翻转对手一个棋子
-        return !getFlippedPoints(board, position,currentPlayer).isEmpty();
+        return !getFlippedPoints(position,currentPlayer).isEmpty();
     }
 
     // =============== 翻转棋子 ===============
@@ -34,25 +34,30 @@ public class Reversi extends Game {
      */
     @Override
     public boolean handleMove(Point position) {
-        Map<Point, List<Point>> validMap = getValidPosition();
-        if (validMap.containsKey(position)) {
-            flipPieces(position, validMap.get(position));
+        List<Point> flipped = getFlippedPoints(position, currentPlayer);
+        if(!flipped.isEmpty()) {
+            flipPieces(position, flipped);
             return true;
         }
         return false;
     }
 
     /* 计算某处落子可翻转的棋子 */
-    public List<Point> getFlippedPoints(Board board, Point position, Player currentPlayer) {
+    public List<Point> getFlippedPoints(Point position, Player currentPlayer) {
         Player opponent = getOpponent(currentPlayer);
         List<Point> flipped = new ArrayList<>();
+
+        // 如果位置已经有棋子，直接返回空列表
+        if(board.getPiece(position) != Piece.EMPTY) {
+            return flipped;
+        }
 
         for(Direction dir : Direction.values()){
             List<Point>temp = new ArrayList<>();
             Point current = new Point(position.x + dir.dx, position.y+ dir.dy);
             // 获取需要翻转的对手的棋子
             while(isOnBoard(current) && board.getPiece(current) == opponent.piece()){
-                temp.add(current);
+                temp.add(new Point(current));
                 current.x += dir.dx;
                 current.y += dir.dy;
             }
@@ -71,7 +76,7 @@ public class Reversi extends Game {
             for(int j = 0; j < board.getSize(); j++){
                 Point pos = new Point(i, j);
                 if(board.getPiece(pos) == Piece.EMPTY){
-                    List<Point> flipped = getFlippedPoints(board, pos, currentPlayer);
+                    List<Point> flipped = getFlippedPoints(pos, currentPlayer);
                     if(!flipped.isEmpty()){
                         validPosition.put(pos, flipped);
                     }
@@ -84,6 +89,7 @@ public class Reversi extends Game {
     /* 执行翻转操作 */
     public void flipPieces(Point position, List<Point> toFlip) {
         board.getGrid()[position.x][position.y] = currentPlayer.piece(); // 落子
+        System.out.println("翻转棋子: " + toFlip);
         for (Point p : toFlip) {
             board.getGrid()[p.x][p.y] = currentPlayer.piece(); // 翻转对手棋子
         }
