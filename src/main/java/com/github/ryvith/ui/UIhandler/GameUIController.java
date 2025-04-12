@@ -16,9 +16,7 @@ import javafx.scene.shape.*;
 
 import java.awt.Point;
 import java.net.URL;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class GameUIController {
     // ====== UI组件注入 ======
@@ -53,11 +51,13 @@ public class GameUIController {
                     .withSize(8)
                     .withPlayers("Tom", "Jerry")
                     .build();
-            this.gameManager = new GameManager(List.of(
+
+            this.gameManager = new GameManager(new ArrayList<>(List.of(
                     new Peace(config),
                     new Reversi(config),
                     new Gomoku(config)
-            ));
+            )));
+
             this.currentGame = gameManager.getCurrentGame();
 
             gameListView.setOnMouseClicked(event -> {
@@ -185,7 +185,6 @@ public class GameUIController {
             // Peace隐藏不相关元素
             scoreBox.setVisible(false);
             roundLabel.setVisible(false);
-            passButton.setVisible(false);
         }
     }
 
@@ -219,6 +218,7 @@ public class GameUIController {
         title.getStyleClass().add("game-title");
         gameInfoBox.getChildren().add(title);
 
+
         // 添加玩家信息
         addPlayerInfo(currentGame.getPlayers()[0]);
         addPlayerInfo(currentGame.getPlayers()[1]);
@@ -239,8 +239,9 @@ public class GameUIController {
 
         // 玩家名称和得分
         Label nameLabel = new Label(player.name());
-        if (player.equals(currentGame.getCurrentPlayer())) {
-            nameLabel.getStyleClass().add("当前玩家");
+        if (player.name().equals(currentGame.getCurrentPlayer().name()) &&
+                player.piece() == currentGame.getCurrentPlayer().piece()) {
+            nameLabel.getStyleClass().add("current-player");
         }
 
         playerBox.getChildren().addAll(piece, nameLabel);
@@ -369,6 +370,7 @@ public class GameUIController {
             if (currentGame.shouldGameEnd()) {
                 GameResult result = currentGame.handleGameEnd();
                 showGameResult(result);
+                disableBoard();
             }else{
                 currentGame.switchPlayer();
                 updateUI();
@@ -378,6 +380,23 @@ public class GameUIController {
         }
     }
 
+    @FXML
+    private void handleQuit() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("退出");
+        alert.setHeaderText("确定要退出游戏吗？");
+
+        // 只保留“是”和“否”按钮
+        ButtonType yes = new ButtonType("是", ButtonBar.ButtonData.YES);
+        ButtonType no = new ButtonType("否", ButtonBar.ButtonData.NO);
+        alert.getButtonTypes().setAll(yes, no);
+
+        alert.showAndWait().ifPresent(type -> {
+            if (type == yes) {
+                System.exit(0); // 直接退出程序
+            }
+        });
+    }
 
 
 
@@ -442,52 +461,83 @@ public class GameUIController {
         updateUI();        // 更新所有相关UI
     }
 
+    @FXML
+    private void handleAddNewGame() {
+        // 创建一个 Alert 弹窗用于选择
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("选择游戏类型");
+        alert.setHeaderText("请选择要添加的新游戏类型：");
+        alert.setContentText("请选择一种棋类：");
+
+        ButtonType peaceButton = new ButtonType("Peace");
+        ButtonType reversiButton = new ButtonType("Reversi");
+        ButtonType gomokuButton = new ButtonType("Gomoku");
+        ButtonType cancelButton = new ButtonType("取消", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(peaceButton, reversiButton, gomokuButton, cancelButton);
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        Game newGame = null;
+
+        if (result.isPresent()) {
+            if (result.get() == peaceButton) {
+                newGame = new Peace(currentGame.getConfig());
+            } else if (result.get() == reversiButton) {
+                newGame = new Reversi(currentGame.getConfig());
+            } else if (result.get() == gomokuButton) {
+                newGame = new Gomoku(currentGame.getConfig());
+            }
+            else {
+                return; // 用户取消
+            }
+
+            // 添加到列表并切换为当前游戏
+            if(newGame != null){
+                gameManager.getGames().add(newGame);
+                gameListView.getItems().add(newGame);
+                gameListView.getSelectionModel().select(newGame);
+                currentGame = newGame;
+            }
+
+
+            updateUI(); // 刷新 UI
+        }
+    }
+
     /* 展现游戏结束画面 */
     private void showGameResult(GameResult result) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("游戏结束");
         alert.setHeaderText(null);
 
-        // 创建内容容器
         VBox content = new VBox(10);
         content.setAlignment(Pos.CENTER);
-        content.setPadding(new Insets(15));
 
-        // 游戏结束标题
-        Label gameTitle = new Label();
-        gameTitle.setText("游戏结束");
+        Label gameTitle = new Label("游戏结束");
         gameTitle.getStyleClass().add("game-title");
 
-        // 不同游戏类型特定结果信息
         Label resultMessage = new Label();
 
         if(currentGame instanceof Peace) {
             resultMessage.setText("棋盘已满，游戏结束！");
         }
-        if(currentGame instanceof Reversi) {
-            String message = String.format("黑方: %d 分\n白方: %d 分\n", result.blackScore(), result.whiteScore());
-            if (result.blackScore() == result.whiteScore()) {
-                message += "比赛结果: 平局！";
-            } else {
-                message += "获胜者: " + result.winner().name();
+        else if (result != null) {  // 添加null检查
+            if(currentGame instanceof Reversi) {
+                String message = String.format("黑方: %d 分\n白方: %d 分\n",
+                        result.blackScore(), result.whiteScore());
+                message += (result.blackScore() == result.whiteScore()) ?
+                        "比赛结果: 平局！" : "获胜者: " + result.winner().name();
+                resultMessage.setText(message);
             }
-            resultMessage.setText(message);
+            else if(currentGame instanceof Gomoku) {
+                resultMessage.setText("恭喜 " + result.winner().name() + " 达成五子连线，获得胜利！");
+            }
         }
-        if(currentGame instanceof Gomoku) {
-            resultMessage.setText("恭喜 " + result.winner().name() + " 达成五子连线，获得胜利！");
-        }
-        resultMessage.getStyleClass().add("result-message");
 
         content.getChildren().addAll(gameTitle, resultMessage);
 
-        // 设置对话框
-        DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.setContent(content);
-        dialogPane.getStylesheets().add(
-                getClass().getResource("/com/github/ryvith/style.css").toExternalForm()
-        );
-        dialogPane.getStyleClass().add("game-result-dialog");
-
+        alert.getDialogPane().setContent(content);
         alert.showAndWait();
     }
 
@@ -507,5 +557,12 @@ public class GameUIController {
         alert.showAndWait();
     }
 
+    private void disableBoard() {
+        for (Node node : boardGrid.getChildren()) {
+            if (node instanceof StackPane) {
+                node.setDisable(true);
+            }
+        }
+    }
 
 }

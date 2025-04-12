@@ -60,10 +60,11 @@ public class GameManager {
     }
 
     /* 添加新游戏 */
-    private void addNewGame(String type, GameConfig config) {
+    public void addNewGame(String type, GameConfig config) {
         Game game = switch(type) {
             case "peace" -> new Peace(config);
             case "reversi" -> new Reversi(config);
+            case "gomoku" -> new Gomoku(config);
             default -> throw new IllegalArgumentException("未知类型");
         };
         games.add(game);

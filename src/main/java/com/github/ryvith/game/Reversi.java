@@ -89,7 +89,6 @@ public class Reversi extends Game {
     /* 执行翻转操作 */
     public void flipPieces(Point position, List<Point> toFlip) {
         board.getGrid()[position.x][position.y] = currentPlayer.piece(); // 落子
-        System.out.println("翻转棋子: " + toFlip);
         for (Point p : toFlip) {
             board.getGrid()[p.x][p.y] = currentPlayer.piece(); // 翻转对手棋子
         }

@@ -48,7 +48,9 @@
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
-            <Button fx:id="passButton" text="Pass" />
+            <Button fx:id="passButton" text="Pass" onAction="#handlePass"/>
+            <Button text="quit" onAction="#handleQuit" />
+            <Button text="添加新游戏" onAction="#handleAddNewGame" />
         </HBox>
     </bottom>
 

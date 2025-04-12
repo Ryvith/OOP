@@ -11,6 +11,7 @@ import java.awt.*;
 public class Gomoku extends Game{
     private int round = 0;
     private Player winner;
+    private boolean gameEnded = false;
 
     public Gomoku(GameConfig config) {
         super(config, null);
@@ -31,10 +32,10 @@ public class Gomoku extends Game{
         if(isValidMove(position)) {
             setPiece(position);
             round++;
-            shouldGameEnd = hasFiveInLine(position, board.getPiece(position)); // 检查是否五子连线
-            if(shouldGameEnd) {
+            if(hasFiveInLine(position, board.getPiece(position))){
+                gameEnded = true;
                 winner = currentPlayer;
-            }
+            }; // 检查是否五子连线
             return true;
         }
         return false;
@@ -90,8 +91,7 @@ public class Gomoku extends Game{
     // =============== 游戏结束 =============
     @Override
     public boolean shouldGameEnd() {
-        // 每次落子时已判断完，此处无需全局判断
-        return false;
+        return gameEnded;
     }
 
     @Override
