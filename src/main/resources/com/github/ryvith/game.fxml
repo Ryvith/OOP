@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.Scene?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.github.ryvith.ui.UIhandler.GameUIController"
+            prefHeight="600.0" prefWidth="800.0"
+            stylesheets="@style.css">
+
+    <!-- 中间：棋盘区域 -->
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true">
+            <content>
+                <GridPane fx:id="boardGrid" styleClass="board-pane"/>
+            </content>
+        </ScrollPane>
+    </center>
+
+    <!-- 右侧：信息和游戏列表 -->
+    <right>
+        <VBox spacing="10" styleClass="right-panel" BorderPane.alignment="CENTER_RIGHT">
+            <!-- 游戏信息 -->
+            <VBox fx:id="gameInfoBox" spacing="10" styleClass="info-panel">
+                <!-- 可添加 Label、Score 等信息 -->
+            </VBox>
+
+            <!-- 游戏列表 -->
+            <ListView fx:id="gameListView" styleClass="game-list"/>
+            <HBox fx:id="scoreBox" spacing="10" alignment="CENTER_LEFT">
+                <Label text="Tom :" />
+                <Label fx:id="score1" text="0" />
+                <Label text="Jerry :" />
+                <Label fx:id="score2" text="0" />
+
+            </HBox>
+            <Label fx:id="roundLabel" text="Round 1" visible="false" styleClass="large-text"/>
+
+        </VBox>
+    </right>
+
+    <!-- 底部：操作按钮 -->
+    <bottom>
+        <HBox alignment="CENTER" spacing="10" styleClass="bottom-panel">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Button fx:id="passButton" text="Pass" />
+        </HBox>
+    </bottom>
+
+
+</BorderPane>
